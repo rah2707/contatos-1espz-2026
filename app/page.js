@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect} from "react";
+import { useState, useEffect } from "react";
 import ContactForm from "./components/ContactForm";
 import ContactList from "./components/ContactList";
 import FilterInput from "./components/FilterInput";
@@ -20,14 +20,13 @@ const HomePage = () => {
       localStorage.setItem('contatos', JSON.stringify(contacts));
     }
   }, [contacts, isLoaded]);
- 
+
   const filteredContacts = contacts.filter(contact =>
     contact.nome.toLowerCase().includes(filter.toLowerCase()) ||
     contact.email.toLowerCase().includes(filter.toLowerCase())
   );
 
-  // Renderizar lista filtrada
-  <ContactList items={filteredContacts} onRemove={handleRemove} />
+
 
   return (
     <div className="min-h-screen bg-gray-200 p-6">
@@ -38,7 +37,7 @@ const HomePage = () => {
           </h1>
           <FilterInput value={filter} onChange={setFilter} />
         </header>
-        
+
         {/* ===== FORMULÁRIO ===== */}
         <ContactForm setContacts={setContacts} />
 
