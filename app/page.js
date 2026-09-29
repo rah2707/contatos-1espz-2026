@@ -4,6 +4,7 @@ import ContactForm from "./components/ContactForm";
 import ContactList from "./components/ContactList";
 import FilterInput from "./components/FilterInput";
 import Statistics from "./components/Statistics";
+import contactsApi from "./services/contactsApi";
 
 const HomePage = () => {
   const [contacts, setContacts] = useState([]);
@@ -11,13 +12,24 @@ const HomePage = () => {
   const [isLoaded, setIsLoaded] = useState(false);
   
 
+  // useEffect(() => {
+  //   const savedContacts = localStorage.getItem('contatos');
+  //   if (savedContacts) {
+  //     setContacts(JSON.parse(savedContacts));
+  //   }
+  //   setIsLoaded(true);
+  // }, []);
+
   useEffect(() => {
-    const savedContacts = localStorage.getItem('contatos');
-    if (savedContacts) {
-      setContacts(JSON.parse(savedContacts));
+    const loadContacts = async () => {
+      const response = await contactsApi.get('/contatos');
+      setContacts(response.data);
+      // Manter localStorage como backup
+      localStorage.setItem('contatos', JSON.stringify(response.data));
     }
-    setIsLoaded(true);
-  }, []);
+    loadContacts()
+  }, [])
+  
   useEffect(() => {
     if (isLoaded) {
       localStorage.setItem('contatos', JSON.stringify(contacts));
@@ -66,7 +78,7 @@ const HomePage = () => {
 
         {/* ===== FORMULÁRIO ===== */}
         <ContactForm setContacts={setContacts} />
-        <Statistics />
+        <Statistics stats={stats}/>
         {/* ===== LISTA DE CONTATOS ===== */}
         <ContactList contacts={filteredContacts} setContacts={setContacts} />
       </div>
